@@ -1,33 +1,37 @@
 import { k8sCoreV1Api } from "./config.js";
 
-export const createService = async (sandboxId) => {
-    const serviceManifest = {
-        metadata: {
-            name: `sandbox-service-${sandboxId}`,
-            labels: {
-                app: 'sandbox-service',
-                sandboxId: sandboxId
-            }
+export async function createService(sandboxId) {
+  const serviceManifest = {
+    apiVersion: "v1",
+    kind: "Service",
+    metadata: {
+      name: `sandbox-service-${sandboxId}`,
+      labels: {
+        app: "sandbox-service",
+        sandboxId: sandboxId,
+      },
+    },
+    spec: {
+      selector: {
+        app: "sandbox-pod",
+        sandboxId: sandboxId,
+      },
+      ports: [
+        {
+          name: "http",
+          port: 80,
+          targetPort: 5173,
+          protocol: "TCP",
         },
-        spec: {
-            selector: {
-                app: 'sandbox-pod',
-                sandboxId: sandboxId
-            }
-        },
-        ports:[
-            {
-                name: 'http',
-                port: 80,
-                targetPort: 5173,
-                protocol: 'TCP'
-            },
-        ],
-        type: 'ClusterIP'
-            
-    }
+      ],
+      type: "ClusterIP",
+    },
+  };
 
-    const response = await k8sCoreV1Api.createNamespacedService({namespace: 'default', body: serviceManifest});
+  const response = await k8sCoreV1Api.createNamespacedService({
+    namespace: "default",
+    body: serviceManifest,
+  });
 
-    return response;
+  return response;
 }

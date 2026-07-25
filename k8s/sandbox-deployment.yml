@@ -20,8 +20,8 @@ spec:
       serviceAccountName: resource-manager
       containers:
         - name: main-sandbox-container
-          image: sandbox:latest
-          imagePullPolicy: IfNotPresent 
+          image: sandbox
+          imagePullPolicy: Always
           resources:
             limits:
               cpu: "500m"

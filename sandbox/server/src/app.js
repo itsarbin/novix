@@ -16,9 +16,16 @@ app.get('/api/sandbox/healthz', (req,res)=>{
     })
 })
 
+app.get('/api/sandbox/hello', (req,res)=>{
+    res.status(200).json({
+        message:'Hello from Sandbox API',
+        status:'ok'
+    })
+})
+
 app.post('/api/sandbox/start', async (req,res)=>{
   
-    const sandboxId = uuid();
+   try{ const sandboxId = uuid();
 
     await Promise.all([
         createPod(sandboxId),
@@ -29,7 +36,13 @@ app.post('/api/sandbox/start', async (req,res)=>{
         message:'Sandbox started successfully',
         sandboxId:sandboxId,    
         previewUrl:`http://${sandboxId}.preview.localhost`
-    })
+    })}catch(err){
+        console.error(err);
+        return res.status(500).json({
+            message:'Failed to start sandbox',
+            error:err.message
+        })
+   }
 })
 
 
