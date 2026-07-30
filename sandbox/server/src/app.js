@@ -16,7 +16,7 @@ app.get('/api/sandbox/healthz', (req,res)=>{
     })
 })
 
-app.get('/api/sandbox/hello', (req,res)=>{
+app.get('/api/sandbox/helloo', (req,res)=>{
     res.status(200).json({
         message:'Hello from Sandbox API',
         status:'ok'
