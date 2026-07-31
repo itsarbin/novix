@@ -124,6 +124,8 @@ app.patch("/update-files", async (req, res) => {
             await fs.promises.writeFile(filePath, content, 'utf-8');
             return {
                 [ filePath ]: 'File updated successfully',
+                status:"updated",
+                content,
             }
         } catch (err) {
             return {
