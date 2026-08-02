@@ -4,37 +4,53 @@ metadata:
   name: novix
   labels:
     app.kubernetes.io/name: novix
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+
 spec:
   ingressClassName: nginx
   rules:
-  
-  -  http:
+
+  - http:
       paths:
       - pathType: Prefix
         path: "/api/sandbox"
         backend:
           service:
             name: sandbox-service
-            port: 
+            port:
+              number: 80
+
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/api/ai"
+        backend:
+          service:
+            name: ai-service
+            port:
               number: 80
 
   - host: "*.preview.localhost"
     http:
-     paths:
-       - pathType: Prefix
-         path: '/'
-         backend:
-           service:
-             name: router-service
-             port:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: router-service
+            port:
               number: 80
+
   - host: "*.agent.localhost"
     http:
-     paths:
-       - pathType: Prefix
-         path: '/'
-         backend:
-           service:
-             name: router-service
-             port:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: router-service
+            port:
               number: 80

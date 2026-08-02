@@ -115,7 +115,9 @@ app.patch("/update-files", async (req, res) => {
 
     const results = await Promise.all(updates.map(async (update) => {
         const { file, content } = update;
-        const filePath = path.join(WORKING_DIR, file);
+        const filePath = path.isAbsolute(file)
+    ? file
+    : path.join(WORKING_DIR, file);;
         try {
 
             console.log(path.dirname(filePath), filePath);
