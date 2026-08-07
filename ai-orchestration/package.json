@@ -1,8 +1,7 @@
 {
   "name": "ai-orchestration",
   "version": "1.0.0",
-  "main": "index.js",
-  "type": "module",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon -L server.js"
@@ -12,13 +11,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@langchain/core": "^1.2.3",
-    "@langchain/langgraph": "^1.4.8",
+    "@langchain/core": "^1.2.5",
     "@langchain/mistralai": "^1.2.0",
     "axios": "^1.19.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "langchain": "^1.5.4",
+    "langchain": "^1.5.5",
     "morgan": "^1.11.0",
     "zod": "^4.4.3"
   },
