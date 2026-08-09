@@ -4,7 +4,7 @@ import { agent } from "../agents/code.agent.js"
 const agentRouter = Router()
 
 agentRouter.post("/invoke", async (req, res) => {
-    try {
+   
         const { message, projectId } = req.body
 
 
@@ -31,7 +31,7 @@ agentRouter.post("/invoke", async (req, res) => {
         res.flushHeaders(); // Send the headers now and keep the connection open
 
         const writer = (message) => {
-            res.write(`data: ${message}`)
+            res.write(`data: ${message}\n\n`);
         }
 
 
@@ -56,20 +56,14 @@ agentRouter.post("/invoke", async (req, res) => {
         for await (const chunk of stream) {
             console.log("=====================================");
             console.log("chunk from agent stream", chunk);
-            writer(`data: ${chunk}\n\n`);
+            writer(chunk);
             console.log("=====================================");
         }
 
         writer("Done!")
         res.end()
 
-    } catch (err) {
-        res.status(500).json({
-            status: "error",
-            message: "Failed to invoke agent",
-            error: err.message
-        })
-    }
+   
 })
 
 export default agentRouter

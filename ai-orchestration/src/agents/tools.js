@@ -5,30 +5,39 @@ import axios from "axios";
 
 export const listFiles = tool(
     async (_, runtime) => {
-        if (!runtime.context?.projectId) {
-            throw new Error("projectId is missing");
+        try {
+            if (!runtime.context?.projectId) {
+                throw new Error("projectId is missing");
+            }
+            const writer = runtime.writer
+            if (!writer) {
+                throw new Error("Writer is missing");
+            }
+            writer("listing files .....")
+            console.log("=====================================");
+            console.log(runtime.context.projectId);
+            console.log("=====================================");
+            console.log('using list files tool')
+            console.log("=====================================");
+
+            const url = `http://sandbox-service-${runtime.context.projectId}:3000/list-files`
+            
+
+
+            const response = await axios.get(url)
+
+            writer("files listed successfully" + response.data.files.join(","))
+            console.log("=====================================");
+            console.log("response from list files tool", response.data);
+            console.log("=====================================");
+
+            return response.data.files
+        } catch (err) {
+            console.log("=====================================");
+            console.log("error from list files tool", err);
+            console.log("=====================================");
+            throw new Error("Failed to list files: " + err.message)
         }
-        const writer = runtime.writer
-        if(!writer) {
-            throw new Error("Writer is missing");
-        }
-        writer("listing files .....")
-        console.log("=====================================");
-        console.log(runtime.context.projectId);
-        console.log("=====================================");
-        console.log('using list files tool')
-        console.log("=====================================");
-
-        const url = `http://sandbox-service-${runtime.context.projectId}:3000/list-files`
-
-        const response = await axios.get(url)
-
-        writer("files listed successfully"+ response.data.files.join(","))
-        console.log("=====================================");
-        console.log("response from list files tool", response.data);
-        console.log("=====================================");
-
-        return response.data.files
 
     },
     {
@@ -86,6 +95,7 @@ export const updateFiles = tool(
         const response = await axios.patch(url, {
             updates: files
         })
+        
 
         writer("files updated successfully")
         console.log("=====================================");
