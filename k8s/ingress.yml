@@ -10,6 +10,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
 
     nginx.ingress.kubernetes.io/affinity: 'cookie'
+    nginx.ingress.kubernetes.io/session-cookie-path: "/"
     nginx.ingress.kubernetes.io/session-cookie-name: 'route'
 
 spec:
@@ -25,6 +26,15 @@ spec:
             name: sandbox-service
             port:
               number: 80
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/api/auth"
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 80
 
   - http:
       paths:
@@ -36,7 +46,7 @@ spec:
             port:
               number: 80
 
-  - host: "*.preview.localhost"
+  - host: "*.preview.127.0.0.1.nip.io"
     http:
       paths:
       - pathType: Prefix
@@ -47,7 +57,7 @@ spec:
             port:
               number: 80
 
-  - host: "*.agent.localhost"
+  - host: "*.agent.127.0.0.1.nip.io"
     http:
       paths:
       - pathType: Prefix

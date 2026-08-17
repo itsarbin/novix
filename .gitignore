@@ -1,10 +1,14 @@
 # Dependencies
 node_modules/
 
+
+
 # Environment variables
 .env
 .env.*
 
+k8s/secrets.yaml
+k8s/secrets.yml
 # Logs
 logs/
 *.log

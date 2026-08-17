@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { Server } from 'socket.io';
@@ -12,6 +13,11 @@ const WORKING_DIR = '/workspace'
 
 const app = express();
 const httpServer = http.createServer(app);
+
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+}));
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -40,7 +46,7 @@ const ptyProcess = pty.spawn(shell, [], {
 });
 
 ptyProcess.onData((data) => {
-    process.stdout.write(data);
+    io.emit('terminal-output', data);
 });
 
 ptyProcess.onExit((exitCode) => {
