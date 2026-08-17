@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  auth-deployment
+  name: notification-deployment
   labels:
-    name:  auth-deployment
+    name:  notification-deployment
 spec:
   replicas:  1
   selector:
     matchLabels:
-      app: auth
+      app: notification
   template:
     metadata:
       labels:
-        app: auth
+        app: notification
     spec:
       containers:
-      - image:  auth
+      - image:  notification
         imagePullPolicy: IfNotPresent
-        name:  auth-container
+        name:  notification-server
         resources:
           requests:
-            cpu: "250m"
-            memory: "128M"
+            cpu: "150m"
+            memory: "100M"
           limits:
-            cpu: "500m"
-            memory: "256M"
+            cpu: "300m"
+            memory: "200M"
         livenessProbe:
           httpGet:
             path: /status/healthz
@@ -38,11 +38,11 @@ spec:
           initialDelaySeconds: 30
           timeoutSeconds: 10
         env:
-          - name: AUTH_MONGO_URL
+          - name: RABBITMQ_URL
             valueFrom:
               secretKeyRef:
                 name: database
-                key: AUTH_MONGO_URL
+                key: RABBITMQ_URL
           - name: GOOGLE_CLIENT_ID
             valueFrom:
               secretKeyRef:
@@ -53,19 +53,21 @@ spec:
               secretKeyRef:
                 name: google
                 key: GOOGLE_CLIENT_SECRET
-          - name: JWT_SECRET
+          - name: EMAIL_USER
             valueFrom:
               secretKeyRef:
-                name: jwt
-                key: JWT_SECRET
-          - name: RABBITMQ_URL
+                name: google
+                key: EMAIL_USER
+          - name: REFRESH_TOKEN
             valueFrom:
               secretKeyRef:
-                name: database
-                key: RABBITMQ_URL
-        
-              
+                name: google
+                key: REFRESH_TOKEN
         ports:
         - containerPort:  3000
-          name:  http-auth
+          name:  http-notification
+          
+          
+        
+              
        
